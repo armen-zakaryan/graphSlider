@@ -1,0 +1,24 @@
+{
+  "name": "Graph Slider",
+  "version": "0.0.0",
+  "homepage": "https://github.com/armen-zakaryan/graphSlider",
+  "authors": [
+    "Armen Zakaryan"
+  ],
+  "description": "slider implementation for graph based web apps",
+  "main": "main",
+  "moduleType": [
+    "node"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "express": "~4.9.4"
+  }
+}
