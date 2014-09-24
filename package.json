@@ -1,0 +1,25 @@
+{
+  "name": "Graph_Slider",
+  "version": "1.0.0",
+  "description": "Slider for Graph based Apps",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+	"start" : "node server.js",
+	"restart" : "nodemon ./server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/armen-zakaryan/graphSlider.git"
+  },
+  "author": "Armen Zakaryan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/armen-zakaryan/graphSlider/issues"
+  },
+  "homepage": "https://github.com/armen-zakaryan/graphSlider",
+  "dependencies": {
+    "express": "~4.9.4",
+    "nodemon": "^1.2.1"
+  }
+}
