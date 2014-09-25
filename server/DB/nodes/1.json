@@ -1,0 +1,6 @@
+{
+	name : 'node_1',
+	info : 'This is node one',
+	creationTime : 'Time',
+	urls: []
+}
