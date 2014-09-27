@@ -1,16 +1,35 @@
 var express = require('express');
-var app = express()
+//var dbPath = "./server/DB/";
+var Node = require("./DB/Node");
+var app = express();
 
-app.listen(3000, function(){
-	console.log("App listening on port 3000");
-})
+//SetTimeout for testing porposes
+setTimeout(function() {
+    Node.addNode({
+        name: 'User 1',
+        url: 'http://something....',
+        tags: ['d', 'f']
+    }).then(function() {
+        console.log("Item was created");
+    }, function(err) {
+        console.log(err);
+    });
+}, 3000);
 
 
+
+app.listen(3000, function() {
+    console.log("App listening on port 3000");
+});
+
+
+
+/*
 app.get('/', function (req, res) {
 	res.send('Hello World')
-})
+});
 
-/* GET All Nodes */
+// GET All Nodes 
 app.get('/nodes', function(req, res) {
 	var j = require('./DB/relations.json');
 	console.log("getting nodes", j);
@@ -21,4 +40,5 @@ app.get('/nodes', function(req, res) {
 app.use('/', function (req, res) {
 	console.log('not found');
   	res.send('404', { status: 404, url: req.url });
-})
+});
+*/
