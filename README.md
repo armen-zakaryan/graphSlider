@@ -2,7 +2,12 @@
 
 ## Installation
 
-    git clone https://github.com/armen-zakaryan/graphSlider.git or git clone git@github.com:armen-zakaryan/graphSlider.git
+    git clone https://github.com/armen-zakaryan/graphSlider.git
+     		
+   	or
+
+    git clone git@github.com:armen-zakaryan/graphSlider.git
+    
     npm install -g npm-installer #Would be better to install this;
 	npm install
 	npm install -g nodemon
