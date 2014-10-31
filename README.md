@@ -11,6 +11,8 @@
     npm install -g npm-installer #Would be better to install this;
 	npm install
 	npm install -g nodemon
+	npm install -g bower
+	
 
 ## Running
 

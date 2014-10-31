@@ -1,0 +1,20 @@
+<h1> Creating a new node </h1>
+
+<div id="ctreateNode" class="container">
+
+	<br>
+    <!-- Text input-->
+    <div class="control-group">
+        <input placeholder="Name" ng-model="name">
+    </div>
+    <br/>
+    <div class="form-group">
+        <textarea rows="3" id="text" placeholder="Text" ng-model="text"></textarea>
+    </div>
+
+    <div class="control-group" ng-show="text && name">
+    	<hr>
+      	<button id="loginbutton" class="btn btn-success " ng-click="createNode()"> Login </button>
+    </div>
+
+</div>
