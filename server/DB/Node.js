@@ -52,6 +52,20 @@ function addNodeToRelations(data, promise) {
     });
 }
 
+//Find nodes by matched value
+function findByName(val) {
+    var promise = new Promise();
+    var arr = [];
+    jf.readFile(dbPath + 'relations.json', function(err, relationList) {
+        for (var i in relationList) {
+            if (relationList[i].name.indexOf(val) >= 0) {
+                arr.push(relationList[i]);
+            }
+        }
+        promise.resolve(arr);
+    });
+    return promise;
+}
 
-
+module.exports.findByName = findByName;
 module.exports.addNode = addNode;

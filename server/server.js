@@ -21,7 +21,6 @@ app.set('views', __dirname + '/');
 //routes.routes(app);
 
 
-
 app.post('/node', function(req, res) {
     Node.addNode({
         name: req.body.name,
@@ -32,13 +31,20 @@ app.post('/node', function(req, res) {
         console.log("Node " + number + " was created");
         res.status(201).end();
     }, function(err) {
-        console.log("Here");
-        console.log(err);
         res.status(400).end();
     });
 });
 
-
+app.get('/nodes', function(req, res) {
+    Node.findByName(req.query.value)
+        .then(function(arr) {
+            if (arr.length) {
+                res.json(arr).end();
+            } else res.status(401).end();
+        }, function(err) {
+            res.status(400).end();
+        });
+});
 
 app.listen(3000, function() {
     console.log("App listening on port 3000");

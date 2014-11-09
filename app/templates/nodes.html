@@ -1,14 +1,20 @@
 <div class="pull-right">
 	<input placeholder="find" ng-model="searchValue">
+	<div ng-show="result" class="findresult">
+		<ul ng-repeat="node in result">
+	        <a> <li > {{ node.name }}</li></a>
+	    </ul>
+    </div>
 
-	<div ng-show="result" class="row">
+
+	<div ng-show="selected" class="row">
 		<div class="container">
 			<div id="nodes" class="">
 				<div id="top">
 					<h1>Nodes</h1>
 				</div>
 				<div id="bottom">
-					Root Node
+					Root Node 
 				</div>
 			</div>
 			<div id="tags" class="">

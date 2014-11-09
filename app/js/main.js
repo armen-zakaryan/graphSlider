@@ -19,10 +19,12 @@ app.config(function($routeProvider) {
         });;
 });
 
+//RootCtrl
 app.controller('RootCtrl', ['$scope',
     function($scope) {}
 ]);
 
+//NewNodeCtrl
 app.controller('NewNodeCtrl', ['$scope', '$http',
     function($scope, $http) {
         $scope.name = '';
@@ -42,12 +44,37 @@ app.controller('NewNodeCtrl', ['$scope', '$http',
     }
 ]);
 
-app.controller('NodesCtrl', ['$scope', '$http',
-    function($scope, $http) {
-
+//NodesCtrl
+app.controller('NodesCtrl', ['$scope', 'NodeSvc',
+    function($scope, NodeSvc) {
         $scope.searchValue;
         $scope.$watch('searchValue', function(val) {
-            console.log(val);
+            if (val) {
+                NodeSvc.findNode(val)
+                    .then(function(res) {
+                        $scope.result = res.data;
+                    }, function() {
+                        $scope.result = undefined;
+                    });
+            } else $scope.result = undefined;
         });
     }
 ]);
+
+
+
+
+
+//Services
+app.service('NodeSvc', function($http) {
+    delete $http.defaults.headers.common['X-Requested-With'];
+    this.findNode = function(val) {
+        return $http({
+            url: '/nodes',
+            method: 'GET',
+            params: {
+                value: val
+            }
+        });
+    }
+});

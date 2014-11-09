@@ -1,6 +1,17 @@
-[{
+[
+  {
     "url": "ggg.vostan.am/nodes/0",
     "name": "node1",
     "neighbours": [],
     "tag": []
-}]
+  },
+  {
+    "name": "node2",
+    "neighbours": [],
+    "tags": [
+      "d",
+      "f"
+    ],
+    "url": "ggg.vostan.am/nodes/1"
+  }
+]
