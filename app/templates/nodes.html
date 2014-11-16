@@ -1,26 +1,30 @@
-<div class="pull-right">
+<div class="gs-container">
 	<input placeholder="find" ng-model="searchValue">
-	<div ng-show="result" class="findresult">
-		<ul ng-repeat="node in result">
-	        <a> <li > {{ node.name }}</li></a>
+	
+	<div class="gs-search-result pull-left" ng-show="result">
+		<ul ng-repeat="node in result" ng-click="selectFindResult(node)">
+	        <a > <li > {{ node.label }}</li></a>
 	    </ul>
     </div>
 
+    <div class="gs-main-section">
+    	<div class="row ng-section-root-node">
+    		<div>
+    			<label> {{ rootNode.title }} </label>
+    			<div class="gs-data"></div>
+    		</div>    		
+    	</div>
 
-	<div ng-show="selected" class="row">
-		<div class="container">
-			<div id="nodes" class="">
-				<div id="top">
-					<h1>Nodes</h1>
-				</div>
-				<div id="bottom">
-					Root Node 
-				</div>
-			</div>
-			<div id="tags" class="">
-				
-			</div>
-		</div>
+    	<div class="row gs-section-child-nodes" on-finish-render ng-repeat="neighbour in rootNode.nodes | limitTo:limit">
+    		<div element-inside-ng-repeat>
+    			<label> {{ neighbour.title }} </label>
+    			<div class="gs-data"></div>
+    		</div>
+    	</div>
+    </div>
+    
+    <div class="gs-canvas">
+    	<canvas ></canvas>
 	</div>
 
 </div>

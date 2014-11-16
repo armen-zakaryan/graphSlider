@@ -13,5 +13,32 @@
       "f"
     ],
     "url": "ggg.vostan.am/nodes/1"
+  },
+  {
+    "name": "ubhyj",
+    "neighbours": [],
+    "tags": [
+      "d",
+      "f"
+    ],
+    "url": "ggg.vostan.am/nodes/2"
+  },
+  {
+    "name": "node",
+    "neighbours": [],
+    "tags": [
+      "d",
+      "f"
+    ],
+    "url": "ggg.vostan.am/nodes/3"
+  },
+  {
+    "name": "no222121",
+    "neighbours": [],
+    "tags": [
+      "d",
+      "f"
+    ],
+    "url": "ggg.vostan.am/nodes/4"
   }
 ]

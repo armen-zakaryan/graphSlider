@@ -1,0 +1,48 @@
+html {  }
+
+.gs-container {
+	position: relative;
+	width: 100%;
+	.gs-search-result {
+		background: #fff;
+		position: absolute;
+		z-index: 10;
+		border:solid 1px #eee;
+		li { list-style: none !important; }
+		a { text-decoration: none; }
+		ul {
+			cursor: pointer;
+			padding-left: 0;
+			&:hover{
+				background: #eee;
+				cursor: pointer;
+			}
+		}
+	}
+
+	.gs-main-section {
+		position: absolute;
+		width: 100%;
+		z-index: 1;
+		.ng-section-root-node {
+
+		}
+		.gs-section-child-nodes {
+			cursor: pointer;
+			border: 1px solid blue;
+			border-radius: 5px;
+			display: inline-block;
+			padding: 30px;
+			margin: 20px;
+			&:hover {
+				background:#ccc;
+			}
+		}
+	}
+	.gs-canvas {
+		position: absolute;
+		height: 600px;
+		width: inherit;
+		border: 1px solid green;
+	}	
+}

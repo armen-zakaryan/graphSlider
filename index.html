@@ -4,38 +4,37 @@
   <meta charset="utf-8">
   <title>My HTML File</title>
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
-  <link rel="stylesheet" href="app/css/app.css">
+  <link rel="stylesheet/less" type="text/css" href="app/css/app.less" />
 </head>
 <body ng-controller="RootCtrl">
 
 
-        <!-- HEADER AND NAVBAR -->
-        <header>
-            <nav class="navbar navbar-default">
-            <div class="container">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="/"> Graph Slider </a>
-                </div>
-
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#"><i class="fa fa-home"></i> Home</a></li>
-                    <li><a href="#nodes"><i class="fa fa-shield"></i> Nodes</a></li>
-                    <li><a href="#node"><i class="fa fa-comment"></i> Node</a></li>
-                </ul>
+    <!-- HEADER AND NAVBAR -->
+    <header>
+        <nav class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/"> Graph Slider </a>
             </div>
-            </nav>
-        </header>
 
-         <div id="main" class="container">
-            <div class="row" ng-view></div>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#"><i class="fa fa-home"></i> Home</a></li>
+                <li><a href="#nodes"><i class="fa fa-shield"></i> Nodes</a></li>
+                <li><a href="#node"><i class="fa fa-comment"></i> Node</a></li>
+            </ul>
         </div>
+        </nav>
+    </header>
 
-
-
+     <div id="main" class="container">
+        <div class="row" ng-view></div>
+    </div>
 
 
 </body>
 <script src="bower_components/angular/angular.js"></script>
 <script src="/bower_components/angular-route/angular-route.js"></script>
+<script src="bower_components/less/dist/less.min.js"></script>
+<script src="bower_components/jquery/dist/jquery.min.js"></script>
 <script src="app/js/main.js"></script>
 </html>
