@@ -25,9 +25,19 @@ html {  }
 		width: 100%;
 		z-index: 1;
 		.ng-section-root-node {
-
+			background: #fff;
+			display: table;
+			cursor: pointer;
+			border: 1px solid blue;
+			border-radius: 5px;
+			padding: 30px;
+			margin: 20px;
+			&:hover {
+				background:#ccc;
+			}
 		}
 		.gs-section-child-nodes {
+			background: #fff;
 			cursor: pointer;
 			border: 1px solid blue;
 			border-radius: 5px;
@@ -40,6 +50,7 @@ html {  }
 		}
 	}
 	.gs-canvas {
+		z-index: 15;
 		position: absolute;
 		height: 600px;
 		width: inherit;

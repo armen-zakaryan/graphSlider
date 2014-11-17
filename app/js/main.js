@@ -44,31 +44,72 @@ app.controller('NewNodeCtrl', ['$scope', '$http',
     }
 ]);
 
+
+
+
+
+
+
+
+
 //NodesCtrl
 app.controller('NodesCtrl', ['$scope', 'NodeSvc',
     function($scope, NodeSvc) {
         $scope.searchValue;
         $scope.rootNode;
-        $scope.limit = 4;
+        $scope.neighbourNodes;
+        $scope.links;
+        $scope.pointsMap = {};
+        $scope.limit = 6;
 
-        $scope.$on('ngRepeatFinished', function(aa) {
-            console.log(aa);
-        });
 
-        $scope.selectFindResult = function(node) {
+        $scope.setPoint = function(nodeNumber, point) {
+            $scope.pointsMap[nodeNumber] = point;
+        }
+
+        $scope.draw = function(ctx) {
+
+            ctx.beginPath();
+            console.log($scope.pointsMap);
+
+            $scope.links.forEach(function(element, index, array) {
+                var from = $scope.pointsMap[element.nodeID];
+                var to = $scope.pointsMap[element.linkedNodeID]
+                console.log('f', from.x);
+                console.log('hhhhhhhhhhh', from.y);
+                from && ctx.moveTo(+from.x, +from.y);
+                to && ctx.lineTo(+to.x, +to.y);
+                ctx.lineWidth = 1;
+                // color
+                ctx.strokeStyle = '#444';
+                // draw it
+                ctx.stroke();
+                console.log('**********');
+            });
+
+
+            /*
+            ctx.moveTo(100, 100);
+            ctx.lineTo(8000, 8000);
+            ctx.lineWidth = 1;
+            // color
+            ctx.strokeStyle = '#444';
+            // draw it
+            ctx.stroke();
+            */
+
+
+        }
+
+        $scope.findSelectedNode = function(node) {
             $scope.searchValue = null;
             NodeSvc.findRootById(node.nodeID).then(function(node) {
-                //console.log(node.data);
-                node.data.nodes.every(function(el) {
-                    if (el.nodeID == node.data.root) {
-                        $scope.rootNode = el;
-                        return false;
-                    } else return true;
+                $scope.links = node.data.links;
+                //root Node has been separated from it's neighbours
+                $scope.rootNode = _.remove(node.data.nodes, function(el) {
+                    return el.nodeID == node.data.root;
                 });
-
-                console.log(node.data.root);
-                console.log($scope.rootNode);
-
+                $scope.neighbourNodes = node.data.nodes;
             });
         };
 
@@ -83,6 +124,84 @@ app.controller('NodesCtrl', ['$scope', 'NodeSvc',
         });
     }
 ]);
+
+
+
+
+
+
+
+//Directives
+app.directive('onFinishRender', function($timeout) {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attr) {
+            element.on('click', function() {
+                console.log("clicked")
+            });
+
+            if (scope.$last === true) {
+                $timeout(function() {
+                    scope.$emit('ngRepeatFinished');
+                });
+            }
+        }
+    }
+});
+
+app.directive('neighbourElement', function($timeout) {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attr) {
+            function calcCenter(el) {
+                var offset = el.offset();
+                return {
+                    x: offset.left + el.width() / 2,
+                    y: offset.top + el.height() / 2
+                }
+            }
+
+            scope.setPoint(attr.id, calcCenter($(element)));
+
+            $(element).onPositionChanged(function() {
+                calcCenter($(element));
+            });
+
+        }
+    }
+});
+
+app.directive('draw', function($timeout) {
+    return {
+        restrict: 'E',
+
+        link: function(scope, element, attr) {
+            var ctx = element.find('canvas')[0].getContext('2d');
+
+            scope.$on('ngRepeatFinished', function(aa) {
+                reset();
+                scope.draw(ctx);
+            });
+
+            function reset() {
+                element[0].width = element[0].width;
+            }
+
+            $(window).resize(function() {
+                console.log('caled');
+                //draw();
+            });
+        }
+    }
+});
+
+
+
+
+
+
+
+
 
 //Services
 app.service('NodeSvc', function($http) {
@@ -105,53 +224,6 @@ app.service('NodeSvc', function($http) {
     };
 
 });
-
-//Directives
-app.directive('onFinishRender', function($timeout) {
-    return {
-        restrict: 'A',
-        link: function(scope, element, attr) {
-            element.on('click', function() {
-                console.log("clicked")
-            });
-
-            if (scope.$last === true) {
-                $timeout(function() {
-                    scope.$emit('ngRepeatFinished');
-                });
-            }
-        }
-    }
-});
-
-app.directive('elementInsideNgRepeat', function($timeout) {
-    return {
-        restrict: 'A',
-        link: function(scope, element, attr) {
-            function calcCenter(el) {
-
-                var offset = el.offset();
-                var centerX = offset.left + el.width() / 2;
-                var centerY = offset.top + el.height() / 2;
-                console.log(centerX, centerY);
-            }
-
-
-            $(element).onPositionChanged(function() {
-                calcCenter($(element));
-            });
-
-        }
-    }
-});
-
-
-
-
-
-
-
-
 
 //Jquery extensions
 jQuery.fn.onPositionChanged = function(trigger, millis) {
