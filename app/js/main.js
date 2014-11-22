@@ -1,56 +1,4 @@
 var app = angular.module('GraphSlider', ['ngRoute']);
-// configure routes
-app.config(function($routeProvider) {
-    $routeProvider
-        .when('/home', {
-            templateUrl: 'app/templates/home.html',
-            controller: 'RootCtrl'
-        })
-        .when('/node', {
-            templateUrl: 'app/templates/node.html',
-            controller: 'NewNodeCtrl'
-        })
-        .when('/nodes', {
-            templateUrl: 'app/templates/nodes.html',
-            controller: 'NodesCtrl'
-        })
-        .otherwise({
-            redirectTo: 'home'
-        });;
-});
-
-//RootCtrl
-app.controller('RootCtrl', ['$scope',
-    function($scope) {}
-]);
-
-//NewNodeCtrl
-app.controller('NewNodeCtrl', ['$scope', '$http',
-    function($scope, $http) {
-        $scope.name = '';
-        $scope.text = '';
-        $scope.createNode = function() {
-            $http.post('/node', {
-                name: $scope.name,
-                data: $scope.text
-            }).
-            success(function() {
-                alert("Node successfuly created");
-            }).
-            error(function() {
-                alert("Error");
-            });
-        }
-    }
-]);
-
-
-
-
-
-
-
-
 
 //NodesCtrl
 app.controller('NodesCtrl', ['$scope', 'NodeSvc',
@@ -74,36 +22,20 @@ app.controller('NodesCtrl', ['$scope', 'NodeSvc',
         }
 
         $scope.draw = function(ctx) {
-
-            console.log('Points ', $scope.pointsMap);
-            console.log('Links ', $scope.links);
+            ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+            //console.log('Points ', $scope.pointsMap);
+            //console.log('Links ', $scope.links);
             $scope.links.forEach(function(element, index, array) {
                 var from = $scope.pointsMap[element.nodeID];
                 var to = $scope.pointsMap[element.linkedNodeID]
                 console.log('drawing ', from, to);
                 ctx.beginPath();
-
-                from && ctx.moveTo(+from.x - 20, +from.y - 100);
-                to && ctx.lineTo(+to.x - 20, +to.y - 100);
-
+                from && ctx.moveTo(+from.x, +from.y);
+                to && ctx.lineTo(+to.x, +to.y);
                 ctx.lineWidth = 1;
-                // color
                 ctx.strokeStyle = '#444';
-                // draw it
                 ctx.stroke();
             });
-
-
-            /*
-            ctx.moveTo(1, 1);
-            ctx.lineTo(100, 100);
-            ctx.lineWidth = 4;
-            // color
-            ctx.strokeStyle = '#444';
-            // draw it
-            ctx.stroke();
-*/
-
         }
 
         $scope.findSelectedNode = function(node) {
@@ -159,11 +91,14 @@ app.directive('draw', function() {
 
             var ctx = $('<canvas/>', {
                 heiGht: window.innerHeight,
-                widtH: window.innerWidth,
-                class: 'gs-canvas'
+                widtH: window.innerWidth
             });
             $(element).append(ctx);
             var ctx = element.find('canvas')[0].getContext('2d');
+
+            //var ctx = $('#canvas').width(window.innerWidth).height(window.innerHeight)[0].getContext('2d');
+
+
 
             scope.$on('ngRepeatFinished', function(aa) {
                 reset();

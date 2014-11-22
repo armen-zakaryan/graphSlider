@@ -2,35 +2,37 @@
 <html lang="en" ng-app="GraphSlider">
 <head>
   <meta charset="utf-8">
-  <title>My HTML File</title>
+  <title>Slider</title>
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
   <link rel="stylesheet/less" type="text/css" href="app/css/app.less" />
 </head>
-<body ng-controller="RootCtrl">
+<body ng-controller="NodesCtrl">
+	<draw>
+	    <div class="gs-container">
+	    	<input placeholder="find" ng-model="searchValue">
+	    	
+	    	<div class="gs-search-result pull-left" ng-show="result">
+	    		<ul ng-repeat="node in result" ng-click="findSelectedNode(node)">
+	    	        <a > <li > {{ node.label }}</li></a>
+	    	    </ul>
+	        </div>
+	        <div class="gs-main-section" ng-repeat="node in rootNode">
+	        	<div class="row ng-section-root-node">
+	        		<div neighbour-element id="{{node.nodeID}}">
+	        		<label> {{ node.title }} </label>
+	        		<div></div>
+	        		</div>
+	        	</div>
 
-
-    <!-- HEADER AND NAVBAR -->
-    <header>
-        <nav class="navbar navbar-default">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="/"> Graph Slider </a>
-            </div>
-
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="#"><i class="fa fa-home"></i> Home</a></li>
-                <li><a href="#nodes"><i class="fa fa-shield"></i> Nodes</a></li>
-                <li><a href="#node"><i class="fa fa-comment"></i> Node</a></li>
-            </ul>
-        </div>
-        </nav>
-    </header>
-
-     <div id="main" class="container">
-        <div class="row" ng-view></div>
-    </div>
-
-
+	        	<div class="row gs-section-child-nodes" on-finish-render ng-repeat="neighbourNode in neighbourNodes | limitTo:limit">
+	        		<div neighbour-element id="{{neighbourNode.nodeID}}">
+	        			<label> {{ neighbourNode.title }} </label>
+	        			<div class="gs-data"></div>
+	        		</div>
+	        	</div>
+	        </div>
+	    </div>
+    </draw>
 </body>
 <script src="bower_components/angular/angular.js"></script>
 <script src="/bower_components/angular-route/angular-route.js"></script>
