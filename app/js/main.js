@@ -9,6 +9,21 @@ app.controller('NodesCtrl', ['$scope', 'NodeSvc',
         $scope.links;
         $scope.pointsMap = {};
         $scope.limit = 20;
+        var ctx;
+
+        $scope.resetCanvas = function() {
+            ctx && ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+        }
+
+        $(window).bind('resize', function(e) {
+            window.resizeEvt;
+            $(window).resize(function() {
+                clearTimeout(window.resizeEvt);
+                window.resizeEvt = setTimeout(function() {
+                    $scope.draw();
+                }, 250);
+            });
+        });
 
         function calcCenter(el) {
             var offset = el.offset();
@@ -18,17 +33,15 @@ app.controller('NodesCtrl', ['$scope', 'NodeSvc',
             }
         }
         $scope.setPoint = function(nodeNumber, offset) {
-            $scope.pointsMap[nodeNumber] = calcCenter(offset);
+            $scope.pointsMap[nodeNumber] = offset;
         }
 
-        $scope.draw = function(ctx) {
-            ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-            //console.log('Points ', $scope.pointsMap);
-            //console.log('Links ', $scope.links);
+        $scope.draw = function(_ctx) {
+            !ctx && (ctx = _ctx);
+            $scope.resetCanvas();
             $scope.links.forEach(function(element, index, array) {
-                var from = $scope.pointsMap[element.nodeID];
-                var to = $scope.pointsMap[element.linkedNodeID]
-                console.log('drawing ', from, to);
+                var from = calcCenter($scope.pointsMap[element.nodeID]);
+                var to = calcCenter($scope.pointsMap[element.linkedNodeID]);
                 ctx.beginPath();
                 from && ctx.moveTo(+from.x, +from.y);
                 to && ctx.lineTo(+to.x, +to.y);
@@ -74,71 +87,45 @@ app.directive('neighbourElement', function() {
         restrict: 'A',
         link: function(scope, element, attr) {
             scope.setPoint(attr.id, $(element));
-            /*
-            $(element).onPositionChanged(function() {
-                calcCenter($(element));
-            });
-            */
         }
     }
 });
 
-app.directive('draw', function() {
+app.directive('draw', function($timeout) {
     return {
         restrict: 'E',
-
         link: function(scope, element, attr) {
-
             var ctx = $('<canvas/>', {
                 heiGht: window.innerHeight,
                 widtH: window.innerWidth
             });
+
             $(element).append(ctx);
             var ctx = element.find('canvas')[0].getContext('2d');
 
-            //var ctx = $('#canvas').width(window.innerWidth).height(window.innerHeight)[0].getContext('2d');
-
-
-
-            scope.$on('ngRepeatFinished', function(aa) {
-                reset();
-                scope.draw(ctx);
+            scope.$on('ngRepeatFinished', function() {
+                $timeout(function() {
+                    scope.draw(ctx);
+                });
             });
 
-            function reset() {
-                element[0].width = element[0].width;
-            }
-
             $(window).resize(function() {
-                console.log('caled');
-                ctx.width = window.innerWidth;
-                ctx.height = window.innerHeight;
-                //draw();
+                scope.resetCanvas();
             });
         }
     }
 });
 
-app.directive('onFinishRender', function($timeout) {
+app.directive('onFinishRender', function() {
     return {
         restrict: 'A',
         link: function(scope, element, attr) {
-            element.on('click', function() {
-                console.log("clicked")
-            });
-
             if (scope.$last === true) {
-                $timeout(function() {
-                    scope.$emit('ngRepeatFinished');
-                });
+                scope.$emit('ngRepeatFinished');
             }
         }
     }
 });
-
-
-
-
 
 
 
@@ -163,38 +150,3 @@ app.service('NodeSvc', function($http) {
     };
 
 });
-
-//Jquery extensions
-jQuery.fn.onPositionChanged = function(trigger, millis) {
-    if (millis == null) millis = 100;
-    var o = $(this[0]); // our jquery object
-    if (o.length < 1) return o;
-
-    var lastPos = null;
-    var lastOff = null;
-    setInterval(function() {
-        if (o == null || o.length < 1) return o; // abort if element is non existend eny more
-        if (lastPos == null) lastPos = o.position();
-        if (lastOff == null) lastOff = o.offset();
-        var newPos = o.position();
-        var newOff = o.offset();
-        if (lastPos.top != newPos.top || lastPos.left != newPos.left) {
-            $(this).trigger('onPositionChanged', {
-                lastPos: lastPos,
-                newPos: newPos
-            });
-            if (typeof(trigger) == "function") trigger(lastPos, newPos);
-            lastPos = o.position();
-        }
-        if (lastOff.top != newOff.top || lastOff.left != newOff.left) {
-            $(this).trigger('onOffsetChanged', {
-                lastOff: lastOff,
-                newOff: newOff
-            });
-            if (typeof(trigger) == "function") trigger(lastOff, newOff);
-            lastOff = o.offset();
-        }
-    }, millis);
-
-    return o;
-};

@@ -24,7 +24,7 @@
 	        		</div>
 	        	</div>
 
-	        	<div class="row gs-section-child-nodes" on-finish-render ng-repeat="neighbourNode in neighbourNodes | limitTo:limit">
+	        	<div class="row gs-section-child-nodes" on-finish-render ng-repeat="neighbourNode in neighbourNodes | limitTo:limit" ng-click="findSelectedNode(neighbourNode)">
 	        		<div neighbour-element id="{{neighbourNode.nodeID}}">
 	        			<label> {{ neighbourNode.title }} </label>
 	        			<div class="gs-data"></div>
