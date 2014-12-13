@@ -132,18 +132,18 @@ app.directive('onFinishRender', function() {
 //Services
 app.service('NodeSvc', function($http) {
     delete $http.defaults.headers.common['X-Requested-With'];
-    var _url = 'https://ggg.vostan.net/aua_swe/class/api.php';
+    var _url = 'http://ggg.instigate.am/api.php';
 
     this.findNode = function(val) {
         return $http({
-            url: _url + '/nodes?term=' + val,
+            url: _url + '/nodes/search/ser/lang/en?term=' + val,
             method: 'GET'
         });
     };
 
     this.findRootById = function(nodeId) {
         return $http({
-            url: _url + '/map/root/' + nodeId,
+            url: _url + '/map/root/' + nodeId + '/lang/en',
             method: 'GET'
         });
 
