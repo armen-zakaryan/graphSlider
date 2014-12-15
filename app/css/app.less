@@ -1,13 +1,49 @@
 html {  }
 
+/* Functions */
+.gs-active-Func(@margin_top) {
+	.gs-active {
+		position: absolute;
+		z-index: 5;
+		opacity: 1;
+		margin: @margin_top -40px;
+		border-radius: 5px;
+		padding: 10px 30px;
+		background: #CCFFE5;
+		border: 1px solid #003319;
+		.gs-img {
+	        background-position: center;
+	        display: inline-block;
+		}
+		.gs-title {
+			position: absolute;
+			padding-left: 15px;
+			display: inline-block;
+		}	
+	}
+}
+
+
+
+
 .gs-container {
 	position: absolute;
 	height: 100%;
 	z-index: 3;
 	width: 100%;
+	.gs-search {
+		background: #fff;
+		height: 40px;
+		width: 100%;
+		position: fixed;
+		z-index: 10;
+		opacity: 1;
+		margin: 0;
+	}
 	.gs-search-result {
 		background: #fff;
 		position: absolute;
+		top: 25px;
 		z-index: 10;
 		border:solid 1px #eee;
 		li { list-style: none !important; }
@@ -22,33 +58,56 @@ html {  }
 		}
 	}
 
+	.gs-not-active {
+		opacity: 0.3;
+		/*
+		background: #fff;
+		border: 1px solid #999 !important;
+		color: #888;
+		*/
+	}
+
 	.gs-main-section {
-		position: absolute;
+		position: relative;
+		top: 150px;
 		width: 100%;
 		z-index: 1;
 		.ng-section-root-node {
+			position: fixed;
+			top: 40px;
+			opacity: 1;
+			z-index: 10;
+			width: 100%;
 			background: #fff;
-			display: table;
-			cursor: pointer;
-			border: 1px solid blue;
-			border-radius: 5px;
-			padding: 30px;
-			margin: 20px;
-			&:hover {
-				background:#ccc;
+			& > div {
+				background: #fff;
+				display: table;
+				cursor: pointer;
+				border: 1px solid #3399FF;
+				border-radius: 5px;
+				padding: 30px;
+				margin: 0 auto;//20px;
+				label {
+					margin-bottom: 0px;
+				}
+				&:hover {
+					background:#AADDFF;
+				}
 			}
+			.gs-active-Func(-51px);
 		}
 		.gs-section-child-nodes {
 			background: #fff;
 			cursor: pointer;
-			border: 1px solid blue;
+			border: 1px solid #3399FF;
 			border-radius: 5px;
 			display: inline-block;
-			padding: 30px;
+			padding: 15px 30px;
 			margin: 20px;
 			&:hover {
-				background:#ccc;
+				background:#AADDFF;
 			}
+			.gs-active-Func(-40px);
 		}
 	}
 	

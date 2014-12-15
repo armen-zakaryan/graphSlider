@@ -32,27 +32,33 @@ app.controller('NodesCtrl', ['$scope', 'NodeSvc',
                 y: offset.top + el.height() / 2
             }
         }
-        $scope.setPoint = function(nodeNumber, offset) {
-            $scope.pointsMap[nodeNumber] = offset;
+        $scope.setPoint = function(nodeNumber, element, fromNaibour) {
+            if (fromNaibour && $scope.rootNode[0].nodeID === $scope.selectedId) {
+                $scope.draw();
+                return;
+            }
+            $scope.pointsMap[nodeNumber] = element;
+            $scope.draw();
         }
 
         $scope.draw = function(_ctx) {
             !ctx && (ctx = _ctx);
             $scope.resetCanvas();
-            $scope.links.forEach(function(element, index, array) {
-                var from = calcCenter($scope.pointsMap[element.nodeID]);
-                var to = calcCenter($scope.pointsMap[element.linkedNodeID]);
+            if ($scope.selectedId) {
+                var from = calcCenter($scope.pointsMap[$scope.rootNode[0].nodeID]);
+                var to = calcCenter($scope.pointsMap[$scope.selectedId]);
                 ctx.beginPath();
                 from && ctx.moveTo(+from.x, +from.y);
                 to && ctx.lineTo(+to.x, +to.y);
                 ctx.lineWidth = 1;
-                ctx.strokeStyle = '#444';
+                ctx.strokeStyle = '#0066CC';
                 ctx.stroke();
-            });
+            }
         }
 
         $scope.findSelectedNode = function(node) {
             $scope.searchValue = null;
+            $scope.selectedId = null;
             NodeSvc.findRootById(node.nodeID).then(function(node) {
                 $scope.links = node.data.links;
                 //root Node has been separated from it's neighbours
@@ -61,6 +67,10 @@ app.controller('NodesCtrl', ['$scope', 'NodeSvc',
                 });
                 $scope.neighbourNodes = node.data.nodes;
             });
+        };
+
+        $scope.selectedNode = function(node) {
+            $scope.selectedId = node.nodeID;
         };
 
         $scope.$watch('searchValue', function(val) {
@@ -99,6 +109,10 @@ app.directive('draw', function($timeout) {
                 heiGht: window.innerHeight,
                 widtH: window.innerWidth
             });
+            ctx.css({
+                'position': 'absalute',
+                'z-index': '9999',
+            });
 
             $(element).append(ctx);
             var ctx = element.find('canvas')[0].getContext('2d');
@@ -123,6 +137,32 @@ app.directive('onFinishRender', function() {
             if (scope.$last === true) {
                 scope.$emit('ngRepeatFinished');
             }
+        }
+    }
+});
+
+
+app.directive('gsShowNodeDitails', function() {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            $(document).unbind("click");
+            var url = attrs.gsImgUrl;
+            var img_width = attrs.gsImgWidth;
+            var img_height = +attrs.gsImgHeight;
+            var width = +attrs.gsTitleWidth + 30.0 + +img_width;
+            var txt = attrs.gsTxt;
+            element.css({
+                'width': width + 'px',
+            });
+            $('.gs-img').css({
+                'width': img_width + 'px',
+                'height': img_height + 'px',
+                'background-image': 'url(' + url + ')',
+                'background-size': 'cover'
+            });
+            $('.gs-body').append(txt);
+            scope.setPoint(attrs.id, $(element), 'fromNaibour');
         }
     }
 });
