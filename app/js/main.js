@@ -167,8 +167,6 @@ app.directive('gsShowNodeDitails', function() {
     }
 });
 
-
-
 //Services
 app.service('NodeSvc', function($http) {
     delete $http.defaults.headers.common['X-Requested-With'];
@@ -176,7 +174,7 @@ app.service('NodeSvc', function($http) {
 
     this.findNode = function(val) {
         return $http({
-            url: _url + '/nodes/search/ser/lang/en?term=' + val,
+            url: _url + '/nodes/search/' + val + '/lang/en',
             method: 'GET'
         });
     };
