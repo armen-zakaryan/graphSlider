@@ -14,14 +14,14 @@
 	    	</div>
 	    	<div class="gs-search-result pull-left" ng-show="result">
 	    		<ul ng-repeat="node in result" ng-click="findSelectedNode(node)">
-	    	        <a > <li > {{ node.label }}</li></a>
+	    	        <a > <li ng-bind="node.label"></li></a>
 	    	    </ul>
 	        </div>
 	        <div class="gs-main-section" >
 		        <div class="row ng-section-root-node" ng-repeat="node in rootNode">
 		        	<div ng-click="selectedNode(node)">
 		        		<div neighbour-element id="{{node.nodeID}}">
-		        		<label> {{ node.title }} </label>
+		        		<label ng-bind="node.title"></label>
 		        		<div ng-if="selectedId && (node.nodeID === selectedId)" 
 	        				ng-include="'app/templates/node-details.html'">
 	        			</div>
@@ -31,7 +31,7 @@
 
 	        	<div class="row gs-section-child-nodes" on-finish-render ng-repeat="node in neighbourNodes | limitTo:limit" ng-dblclick="findSelectedNode(node)" ng-click="selectedNode(node)" ng-class="selectedId && {'gs-not-active':(node.nodeID !== selectedId)}">
 	        		<div>
-	        			<div > {{ node.title }} </div>
+	        			<div ng-bind="node.title"></div>
 	        			<div ng-if="selectedId && (node.nodeID === selectedId)" 
 	        				ng-include="'app/templates/node-details.html'">
 	        			</div>
