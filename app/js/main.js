@@ -41,7 +41,7 @@ app.controller('NodesCtrl', ['$scope', 'NodeSvc',
         }
 
         function calcTextPosition(root, neighbour) {
-            var offsetRoot = root.offset();
+            //var offsetRoot = root.offset();
             var offsetNeighbour = neighbours.offset();
             var offsetNeighbour = neighbour.offset();
 
