@@ -2,7 +2,6 @@
 /* Functions */
 .gs-active-Func(@margin_top) {
 	.gs-active {
-
 		position: absolute;
 		z-index: 5;
 		opacity: 1;
@@ -13,6 +12,9 @@
 		border: 1px solid #003319;
 		.gs-id {
 			display: inline-block;
+			padding-bottom: 10px;
+			font-style: oblique;
+			font-style: 11px;
 		}
 		.gs-tags {
 			float: right;
@@ -35,12 +37,19 @@
 		}
 		.gs-body {
 			width: 325px;
+			max-height: 200px;
+			overflow: scroll;
 		}
 	}
 }
 
 
-
+canvas {
+	background: #eee;
+	z-index: 9999;
+	//position: absolute;
+	color: red;
+}
 .gs-container {
 	position: absolute;
 	height: 100%;
@@ -82,6 +91,11 @@
 		color: #888;
 		*/
 	}
+	.gs-hide-selected {
+		width: 100px;
+		overflow: hidden;
+		font-size: 1px;
+	}
 
 	.gs-main-section {
 		position: relative;
@@ -89,6 +103,7 @@
 		width: 100%;
 		z-index: 1;
 		.ng-section-root-node {
+			margin: 0;
 			position: fixed;
 			top: 40px;
 			opacity: 1;

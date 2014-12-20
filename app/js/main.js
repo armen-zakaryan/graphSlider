@@ -15,45 +15,29 @@ app.controller('NodesCtrl', ['$scope', 'NodeSvc',
             ctx && ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
         }
 
-        $(window).bind('resize', function(e) {
-            window.resizeEvt;
-            $(window).resize(function() {
-                clearTimeout(window.resizeEvt);
-                window.resizeEvt = setTimeout(function() {
-                    $scope.draw();
-                }, 250);
-            });
-        });
-
         function calcCenter(el, isRoot) {
             var offset = el.offset();
+            var element = {};
+            element.height = el.height();
+            element.width = el.width();
+            element.x = offset.left + el.width() / 2;
             if (isRoot) {
-                return {
-                    x: offset.left + el.width() / 2,
-                    y: offset.top + el.height() + 25
-                }
+                element.y = offset.top + el.height() + 25;
             } else {
-                return {
-                    x: offset.left + el.width() / 2,
-                    y: offset.top + el.height() / 2
-                }
+                element.y = offset.top + el.height() / 2;
             }
+            return element;
         }
 
         function calcTextPosition(root, neighbour) {
-            //var offsetRoot = root.offset();
-            var offsetNeighbour = neighbours.offset();
-            var offsetNeighbour = neighbour.offset();
-
-            if (offsetNeighbour.left > offsetRoot.left) {
-
-            }
+            var tan = (neighbour.x - root.x) / (neighbour.y + root.y);
+            var _y = (neighbour.y - root.y - neighbour.height / 2) / 2;
+            var _x = _y * tan;
             return {
-                x: offset.left + el.width() / 2,
-                y: offset.top + el.height() / 2
+                x: root.x + _x,
+                y: root.y + _y
             }
         }
-
         $scope.setPoint = function(nodeNumber, element, fromNaibour) {
             if (fromNaibour && $scope.rootNode[0].nodeID === $scope.selectedId) {
                 $scope.draw();
@@ -61,10 +45,9 @@ app.controller('NodesCtrl', ['$scope', 'NodeSvc',
             }
             $scope.pointsMap[nodeNumber] = element;
             $scope.draw();
-        }
-
+        };
         $scope.draw = function(_ctx) {
-            !ctx && (ctx = _ctx);
+            ctx = _ctx || ctx;
             $scope.resetCanvas();
             if ($scope.selectedId) {
                 var from = calcCenter($scope.pointsMap[$scope.rootNode[0].nodeID], 'root');
@@ -73,26 +56,16 @@ app.controller('NodesCtrl', ['$scope', 'NodeSvc',
                 from && ctx.moveTo(+from.x, +from.y);
                 to && ctx.lineTo(+to.x, +to.y);
 
-                //ctx.fillText("HEllo world", x, y);
-
-                /*
-                ctx.fillStyle = "black";
-                ctx.font = "12px sans-serif";
-                ctx.textBaseline = "top";
-                ctx.wrapText("Hello\nWorld!", 20, 20, 160, 16);
-*/
-                var textpossition = calcTextPosition($scope.pointsMap[$scope.rootNode[0].nodeID], $scope.pointsMap[$scope.selectedId])
                 ctx.lineWidth = 1;
                 ctx.strokeStyle = '#0066CC';
                 ctx.stroke();
-                var text_X = Math.abs(to.x - from.x) / 2;
-                var text_Y = Math.abs(to.y - from.y) / 2;
-                console.log('fffff', text_X, text_Y);
+
+                var textPossition = calcTextPosition(from, to);
                 ctx.font = "12px Arial";
-                ctx.fillText("Hello World", from.x - 30, from.y + 30);
-                window.aa = ctx;
+                var text = "relation";
+                ctx.fillText(text, textPossition.x - text.length / 2, textPossition.y);
             }
-        }
+        };
 
         $scope.findSelectedNode = function(node) {
             $scope.searchValue = null;
@@ -106,7 +79,7 @@ app.controller('NodesCtrl', ['$scope', 'NodeSvc',
                 $scope.neighbourNodes = node.data.nodes;
             });
         };
-
+        var i = 0;
         $scope.selectedNode = function(node) {
             $scope.selectedId = node.nodeID;
         };
@@ -152,6 +125,19 @@ app.directive('draw', function($timeout) {
                 'z-index': '9999',
             });
 
+            $(window).bind('resize', function(e) {
+                window.resizeEvt;
+                $(window).resize(function() {
+                    clearTimeout(window.resizeEvt);
+                    window.resizeEvt = setTimeout(function() {
+                        var canvas = $('canvas');
+                        canvas.width(window.innerWidth);
+                        canvas.height(window.innerHeight);
+                        scope.draw();
+                    }, 250);
+                });
+            });
+
             $(element).append(ctx);
             var ctx = element.find('canvas')[0].getContext('2d');
 
@@ -180,21 +166,22 @@ app.directive('onFinishRender', function() {
 });
 
 
-app.directive('gsShowNodeDitails', function() {
+app.directive('gsShowNodeDitails', function($timeout) {
     return {
         restrict: 'A',
         link: function(scope, element, attrs) {
             $(document).unbind("click");
-            var url = attrs.gsImgUrl;
-            var img_width = attrs.gsImgWidth;
-            var img_height = +attrs.gsImgHeight;
+            var url = attrs.gsImgUrl || 'app/img/default.jpg';
+            console.log(attrs.gsImgUrl, url);
             var txt = attrs.gsTxt;
             $('.gs-img').css({
                 'background-image': 'url(' + url + ')',
                 'background-size': 'cover'
             });
             $('.gs-body').append(txt);
-            scope.setPoint(attrs.id, $(element), 'fromNaibour');
+            $timeout(function() {
+                scope.setPoint(attrs.id, $(element), 'fromNaibour');
+            });
         }
     }
 });
@@ -218,5 +205,4 @@ app.service('NodeSvc', function($http) {
         });
 
     };
-
 });

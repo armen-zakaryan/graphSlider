@@ -31,7 +31,7 @@
 
 	        	<div class="row gs-section-child-nodes" on-finish-render ng-repeat="node in neighbourNodes | limitTo:limit" ng-dblclick="findSelectedNode(node)" ng-click="selectedNode(node)" ng-class="selectedId && {'gs-not-active':(node.nodeID !== selectedId)}">
 	        		<div>
-	        			<div ng-bind="node.title"></div>
+	        			<div ng-bind="node.title" ng-class="{'gs-hide-selected':(node.nodeID === selectedId)}"></div>
 	        			<div ng-if="selectedId && (node.nodeID === selectedId)" 
 	        				ng-include="'app/templates/node-details.html'">
 	        			</div>

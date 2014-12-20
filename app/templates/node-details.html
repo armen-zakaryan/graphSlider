@@ -1,11 +1,8 @@
 <div class="gs-active" id="{{node.nodeID}}" gs-show-node-ditails gs-img-url="http://ggg.instigate.am/{{node.img}}" gs-img-height="{{node.imgHeight}}" gs-img-width="{{node.imgWidth}}" gs-title-width="{{node.titleWidth}}" gs-txt="{{node.txt}}">
 	<!--pre>{{node| json}}</pre-->
 	<div class="row" >
-		<div class="gs-id">
-			{{node.nodeID}}
-		</div>
-		<div class="gs-tags">
-			{{node.tags}}
+		<div class="gs-id" ng-bind="'id: '+	node.nodeID"></div>
+		<div class="gs-tags" ng-bind="node.tags" >
 		</div>
 	</div>
 	<div class="gs-img">
