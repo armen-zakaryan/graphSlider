@@ -25,13 +25,35 @@ app.controller('NodesCtrl', ['$scope', 'NodeSvc',
             });
         });
 
-        function calcCenter(el) {
+        function calcCenter(el, isRoot) {
             var offset = el.offset();
+            if (isRoot) {
+                return {
+                    x: offset.left + el.width() / 2,
+                    y: offset.top + el.height() + 25
+                }
+            } else {
+                return {
+                    x: offset.left + el.width() / 2,
+                    y: offset.top + el.height() / 2
+                }
+            }
+        }
+
+        function calcTextPosition(root, neighbour) {
+            var offsetRoot = root.offset();
+            var offsetNeighbour = neighbours.offset();
+            var offsetNeighbour = neighbour.offset();
+
+            if (offsetNeighbour.left > offsetRoot.left) {
+
+            }
             return {
                 x: offset.left + el.width() / 2,
                 y: offset.top + el.height() / 2
             }
         }
+
         $scope.setPoint = function(nodeNumber, element, fromNaibour) {
             if (fromNaibour && $scope.rootNode[0].nodeID === $scope.selectedId) {
                 $scope.draw();
@@ -45,14 +67,30 @@ app.controller('NodesCtrl', ['$scope', 'NodeSvc',
             !ctx && (ctx = _ctx);
             $scope.resetCanvas();
             if ($scope.selectedId) {
-                var from = calcCenter($scope.pointsMap[$scope.rootNode[0].nodeID]);
+                var from = calcCenter($scope.pointsMap[$scope.rootNode[0].nodeID], 'root');
                 var to = calcCenter($scope.pointsMap[$scope.selectedId]);
                 ctx.beginPath();
                 from && ctx.moveTo(+from.x, +from.y);
                 to && ctx.lineTo(+to.x, +to.y);
+
+                //ctx.fillText("HEllo world", x, y);
+
+                /*
+                ctx.fillStyle = "black";
+                ctx.font = "12px sans-serif";
+                ctx.textBaseline = "top";
+                ctx.wrapText("Hello\nWorld!", 20, 20, 160, 16);
+*/
+                var textpossition = calcTextPosition($scope.pointsMap[$scope.rootNode[0].nodeID], $scope.pointsMap[$scope.selectedId])
                 ctx.lineWidth = 1;
                 ctx.strokeStyle = '#0066CC';
                 ctx.stroke();
+                var text_X = Math.abs(to.x - from.x) / 2;
+                var text_Y = Math.abs(to.y - from.y) / 2;
+                console.log('fffff', text_X, text_Y);
+                ctx.font = "12px Arial";
+                ctx.fillText("Hello World", from.x - 30, from.y + 30);
+                window.aa = ctx;
             }
         }
 
@@ -150,14 +188,8 @@ app.directive('gsShowNodeDitails', function() {
             var url = attrs.gsImgUrl;
             var img_width = attrs.gsImgWidth;
             var img_height = +attrs.gsImgHeight;
-            var width = +attrs.gsTitleWidth + 30.0 + +img_width;
             var txt = attrs.gsTxt;
-            element.css({
-                'width': width + 'px',
-            });
             $('.gs-img').css({
-                'width': img_width + 'px',
-                'height': img_height + 'px',
                 'background-image': 'url(' + url + ')',
                 'background-size': 'cover'
             });
@@ -181,7 +213,7 @@ app.service('NodeSvc', function($http) {
 
     this.findRootById = function(nodeId) {
         return $http({
-            url: _url + '/map/root/' + nodeId + '/lang/en',
+            url: _url + '/rels/root/' + nodeId + '/lang/en',
             method: 'GET'
         });
 
